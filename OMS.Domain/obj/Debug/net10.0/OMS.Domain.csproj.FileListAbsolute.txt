@@ -1,0 +1,11 @@
+C:\_Demos\C#\OMS\Domain\bin\Debug\net10.0\OMS.Domain.deps.json
+C:\_Demos\C#\OMS\Domain\bin\Debug\net10.0\OMS.Domain.dll
+C:\_Demos\C#\OMS\Domain\bin\Debug\net10.0\OMS.Domain.pdb
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\OMS.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\OMS.Domain.AssemblyInfoInputs.cache
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\OMS.Domain.AssemblyInfo.cs
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\OMS.Domain.csproj.CoreCompileInputs.cache
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\OMS.Domain.dll
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\refint\OMS.Domain.dll
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\OMS.Domain.pdb
+C:\_Demos\C#\OMS\Domain\obj\Debug\net10.0\ref\OMS.Domain.dll
