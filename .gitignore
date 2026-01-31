@@ -1,0 +1,81 @@
+############################
+# Build output
+############################
+bin/
+obj/
+[Bb]uild/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+TestResults/
+out/
+artifacts/
+
+############################
+# Visual Studio
+############################
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+############################
+# Rider / IntelliJ
+############################
+.idea/
+*.sln.iml
+
+############################
+# Other IDE junk
+############################
+.vscode/
+.vscode/ipch/
+
+############################
+# NuGet
+############################
+*.nupkg
+*.snupkg
+packages/
+.nuget/packages/
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+############################
+# Publishing
+############################
+**/publish/
+*.pubxml
+*.pubxml.user
+
+############################
+# Temporary / Cache
+############################
+*.tmp
+*.temp
+*.cache
+*.log
+*.tlog
+
+############################
+# Entity Framework
+############################
+Migrations/**/obj/
+
+############################
+# Env & Secrets
+############################
+*.env
+.env*
+**/secrets.json
+
+############################
+# OS Files
+############################
+.DS_Store
+Thumbs.db
+desktop.ini
