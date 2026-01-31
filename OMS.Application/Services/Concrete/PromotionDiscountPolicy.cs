@@ -1,9 +1,4 @@
-﻿using Application.Services.Interfaces;
-using Domain;
-using OMS.Models;
-using OMS.Models.OMS.Domain.Models;
-
-namespace Application.Services.Concrete
+﻿namespace Application.Services.Concrete
 {
     //public class PromotionDiscountPolicy : IDiscountPolicy
     //{

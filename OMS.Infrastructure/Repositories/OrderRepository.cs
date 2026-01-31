@@ -56,7 +56,7 @@ namespace Infrastructure.Repositories
             {
                 order.AppliedDiscounts.Add(new AppliedDiscount(
                     id: d.Id,
-                    category: new DiscountCategory(d.Category.Id, d.Category.Name, d.Category.Type, d.Category.Priority, d.Category.IsActive),
+                    category: new DiscountCategory(),
                     discountName: d.DiscountName,
                     amount: d.Amount,
                     priceAfter: d.PriceAfter//,

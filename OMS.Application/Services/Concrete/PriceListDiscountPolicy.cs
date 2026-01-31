@@ -6,7 +6,7 @@ namespace Application.Services.Concrete
 {
     public class PriceListDiscountPolicy : IDiscountPolicy
     {
-        public DiscountCategory Category => DiscountCategories.PriceList;
+        public DiscountCategory Category => new DiscountCategory();//DiscountCategories.PriceList;
 
         public bool IsEligible(DiscountContext context)
         {
