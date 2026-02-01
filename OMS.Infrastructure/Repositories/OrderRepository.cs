@@ -1,10 +1,9 @@
-﻿using Application.Services.Interfaces.Db;
+using Application.Services.Interfaces.Db;
 using Microsoft.EntityFrameworkCore;
 using OMS.Domain.Models;
 using OMS.Infrastructure.Data;
 using OMS.Infrastructure.Entities;
 using OMS.Models;
-using OMS.Models.OMS.Domain.Models;
 
 namespace Infrastructure.Repositories
 {

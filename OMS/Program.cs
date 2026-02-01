@@ -1,8 +1,15 @@
 using Application.Services.Concrete;
-using Application.Services.Concrete.OMS.Domain.Policies;
 using Application.Services.Interfaces;
+using Application.Services.Interfaces.Repo;
+using Microsoft.EntityFrameworkCore;
+using OMS.Infrastructure.Data;
+using Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<IDiscountCategoryRepository, DiscountCategoryRepository>();
 
 builder.Services.AddScoped<IDiscountPolicy, PriceListDiscountPolicy>();
 builder.Services.AddScoped<IDiscountPolicy, PromotionDiscountPolicy>();

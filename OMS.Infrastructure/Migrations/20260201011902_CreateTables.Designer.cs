@@ -11,8 +11,8 @@ using OMS.Infrastructure.Data;
 namespace OMS.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260201001948_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260201011902_CreateTables")]
+    partial class CreateTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

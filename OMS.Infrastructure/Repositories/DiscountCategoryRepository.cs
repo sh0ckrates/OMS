@@ -1,20 +1,16 @@
-﻿using Application.Services.Interfaces.Repo;
+using Application.Services.Interfaces.Repo;
 using Microsoft.EntityFrameworkCore;
 using OMS.Infrastructure.Data;
 using OMS.Infrastructure.Entities;
-using OMS.Models.OMS.Domain.Models;
+using OMS.Domain.Models;
 
 namespace Infrastructure.Repositories
 {
-    public sealed class DiscountCategoryRepository : IDiscountCategoryRepository
+    public sealed class DiscountCategoryRepository(AppDbContext db) : IDiscountCategoryRepository
     {
-        private readonly AppDbContext _db;
-
-        public DiscountCategoryRepository(AppDbContext db) => _db = db;
-
         public async Task<IReadOnlyList<DiscountCategory>> GetActiveAsync(CancellationToken ct = default)
         {
-            var rows = await _db.DiscountCategories
+            var rows = await db.DiscountCategories
                 .AsNoTracking()
                 .Where(c => c.IsActive)
                 .OrderBy(c => c.Priority)
@@ -25,7 +21,7 @@ namespace Infrastructure.Repositories
 
         public async Task<DiscountCategory?> GetActiveByNameAsync(string name, CancellationToken ct = default)
         {
-            var row = await _db.DiscountCategories
+            var row = await db.DiscountCategories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.IsActive && c.Name == name, ct);
 

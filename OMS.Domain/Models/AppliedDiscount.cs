@@ -1,5 +1,4 @@
-﻿using OMS.Models;
-using OMS.Models.OMS.Domain.Models;
+using OMS.Models;
 
 namespace OMS.Domain.Models
 {

@@ -1,4 +1,4 @@
-﻿using Application.Services.Interfaces;
+using Application.Services.Interfaces;
 using Application.Services.Interfaces.Repo;
 using OMS.Domain.Models;
 using OMS.Enums;
@@ -16,7 +16,7 @@ namespace Application.Services.Concrete
             return cat is not null && context.CurrentPrice > 0m;
         }
 
-        public async Task<DiscountResult> GetDiscountAsync(DiscountContext context, CancellationToken ct = default)
+        public async Task<DiscountResult?> GetDiscountAsync(DiscountContext context, CancellationToken ct = default)
         {
             var cat = await repo.GetActiveByNameAsync(Name, ct);
             if (cat is null) return null;

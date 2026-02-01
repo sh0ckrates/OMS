@@ -1,5 +1,4 @@
-﻿using OMS.Domain.Models;
-using OMS.Models.OMS.Domain.Models;
+using OMS.Domain.Models;
 
 namespace Application.Services.Interfaces.Repo
 {

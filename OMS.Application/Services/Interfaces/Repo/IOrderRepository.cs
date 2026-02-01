@@ -1,4 +1,4 @@
-﻿using OMS.Models;
+using OMS.Models;
 
 namespace Application.Services.Interfaces.Db
 {
@@ -12,6 +12,6 @@ namespace Application.Services.Interfaces.Db
         /// <summary>
         /// Optionally: get order by id (used in read scenarios)
         /// </summary>
-        Task<Order> GetByIdAsync(Guid orderId);
+        Task<Order?> GetByIdAsync(Guid orderId);
     }
 }
