@@ -1,29 +1,33 @@
 ﻿using Application.Services.Interfaces;
-using OMS.Models;
-using OMS.Models.OMS.Domain.Models;
+using Application.Services.Interfaces.Repo;
+using OMS.Domain.Models;
+using OMS.Enums;
 
 namespace Application.Services.Concrete
 {
-    public class PriceListDiscountPolicy : IDiscountPolicy
+    public sealed class PriceListDiscountPolicy(IDiscountCategoryRepository repo) : IDiscountPolicy
     {
-        public DiscountCategory Category => new DiscountCategory();//DiscountCategories.PriceList;
+        public string Name => "PriceList";
+        public int Priority => 1;
 
-        public bool IsEligible(DiscountContext context)
+        public async Task<bool> IsEligibleAsync(DiscountContext context, CancellationToken ct = default)
         {
-            // Example logic:
-            // Could check customer tier, contract, or product eligibility
-            return true;
+            var cat = await repo.GetActiveByNameAsync(Name, ct);
+            return cat is not null && context.CurrentPrice > 0m;
         }
 
-        public DiscountResult GetDiscountResult(DiscountContext context)
+        public async Task<DiscountResult> GetDiscountAsync(DiscountContext context, CancellationToken ct = default)
         {
-            // Example: 5% of current price
-            decimal amount = context.CurrentPrice * 0.05m;
+            var cat = await repo.GetActiveByNameAsync(Name, ct);
+            if (cat is null) return null;
 
-            context.ApplyDiscount(amount);
+            decimal amount = cat.Type == DiscountType.Percentage
+                ? context.CurrentPrice * cat.Value
+                : cat.Value;
 
-            return new DiscountResult(Category, amount, context.CurrentPrice);
+            if (amount <= 0m) return null;
+
+            return new DiscountResult(cat.Name, cat.Type, amount, context.CurrentPrice);
         }
     }
-
 }

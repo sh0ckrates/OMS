@@ -1,27 +1,52 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OMS.Application.Services.Interfaces.Repo;
+﻿using Application.Services.Interfaces.Repo;
+using Microsoft.EntityFrameworkCore;
 using OMS.Infrastructure.Data;
-using OMS.Models;
+using OMS.Infrastructure.Entities;
 using OMS.Models.OMS.Domain.Models;
 
-namespace OMS.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
-    public class DiscountCategoryRepository(AppDbContext context) : IDiscountCategoryRepository
+    public sealed class DiscountCategoryRepository : IDiscountCategoryRepository
     {
-        public async Task<List<DiscountCategory>> GetActiveDiscountCategories()
+        private readonly AppDbContext _db;
+
+        public DiscountCategoryRepository(AppDbContext db) => _db = db;
+
+        public async Task<IReadOnlyList<DiscountCategory>> GetActiveAsync(CancellationToken ct = default)
         {
-            return await context.DiscountCategories
+            var rows = await _db.DiscountCategories
+                .AsNoTracking()
                 .Where(c => c.IsActive)
                 .OrderBy(c => c.Priority)
-                .Select(c => new DiscountCategory
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Type = c.Type,
-                    Priority = c.Priority,
-                    IsActive = c.IsActive
-                })
-                .ToListAsync();
+                .ToListAsync(ct);
+
+            return rows.Select(MapToDomain).ToList();
+        }
+
+        public async Task<DiscountCategory?> GetActiveByNameAsync(string name, CancellationToken ct = default)
+        {
+            var row = await _db.DiscountCategories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.IsActive && c.Name == name, ct);
+
+            return row is null ? null : MapToDomain(row);
+        }
+
+        private static DiscountCategory MapToDomain(DiscountCategoryEntity e)
+        {
+            // Mirror the semantics that matter in the domain
+            var model = new DiscountCategory(
+                name: e.Name,
+                type: e.Type,
+                value: e.Value,          // Percentage (0..1) or Fixed amount
+                priority: e.Priority,
+                isActive: e.IsActive
+            )
+            {
+                Id = e.Id
+            };
+
+            return model;
         }
     }
 }

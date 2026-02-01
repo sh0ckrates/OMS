@@ -1,24 +1,38 @@
 ﻿using Application.Services.Interfaces;
+using OMS.Domain.Models;
 using OMS.Models;
 
-public class DiscountEngine(IEnumerable<IDiscountPolicy> policies)
+namespace Application.Services.Concrete
 {
-    private readonly IReadOnlyCollection<IDiscountPolicy> _policies = [.. policies.OrderBy(p => p.Category.Priority)];
-
-    public DiscountSummary ApplyDiscount(Order order)
+    public sealed class DiscountEngine(IEnumerable<IDiscountPolicy> policies) : IDiscountEngine
     {
-        var context = new DiscountContext(order);
-        var results = new List<DiscountResult>();
+        private readonly IReadOnlyList<IDiscountPolicy> _policies = policies.OrderBy(p => p.Priority).ToList();
 
-        foreach (var policy in _policies)
+        public async Task<DiscountSummary> ApplyDiscountAsync(Order order, CancellationToken ct = default)
         {
-            if (!policy.IsEligible(context))
-                continue;
+            static decimal Round2(decimal v) => Math.Round(v, 2, MidpointRounding.ToEven);
 
-            var result = policy.GetDiscountResult(context);
-            results.Add(result);
+            var context = new DiscountContext(order);
+            var results = new List<DiscountResult>();
+
+            foreach (var policy in _policies)
+            {
+                if (context.CurrentPrice <= 0m) break;
+
+                if (!await policy.IsEligibleAsync(context, ct)) continue;
+
+                var proposal = await policy.GetDiscountAsync(context, ct);
+                if (proposal is null) continue;
+
+                var amount = Math.Min(proposal.AmountApplied, context.CurrentPrice);
+                amount = Round2(amount);
+
+                context.ApplyDiscount(amount); // rounds & clamps to 0
+
+                results.Add(new DiscountResult(proposal.Name, proposal.Kind, amount, context.CurrentPrice));
+            }
+
+            return new DiscountSummary(order.InitialPrice, context.CurrentPrice, results);
         }
-
-        return new DiscountSummary(order.InitialPrice, context.CurrentPrice, results);
     }
 }

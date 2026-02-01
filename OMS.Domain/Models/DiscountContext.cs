@@ -1,19 +1,19 @@
-﻿namespace OMS.Models
+﻿// OMS.Domain/Models/DiscountContext.cs
+using OMS.Models;
+
+namespace OMS.Domain.Models
 {
-    /// <summary>
-    /// Tracks current price as discounts are applied.
-    /// </summary>
-    public class DiscountContext(Order order)
+    public sealed class DiscountContext(Order order)
     {
-        public Order Order { get; } = order;
+        public Order Order { get; } = order ?? throw new ArgumentNullException(nameof(order));
         public decimal CurrentPrice { get; private set; } = order.InitialPrice;
 
         public void ApplyDiscount(decimal amount)
         {
-            CurrentPrice -= amount;
-            if (CurrentPrice < 0)
-                CurrentPrice = 0;
+            amount = Round2(amount);
+            CurrentPrice = Math.Max(0m, Round2(CurrentPrice - amount));
         }
+
+        private static decimal Round2(decimal v) => Math.Round(v, 2, MidpointRounding.ToEven);
     }
 }
-

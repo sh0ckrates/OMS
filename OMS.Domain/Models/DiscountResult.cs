@@ -1,15 +1,13 @@
-﻿using OMS.Models.OMS.Domain.Models;
+﻿// OMS.Domain/Models/DiscountResult.cs
+using OMS.Enums;
 
-namespace OMS.Models
+namespace OMS.Domain.Models
 {
-    /// <summary>
-    /// Represents the result of applying a discount.
-    /// </summary>
-    public class DiscountResult(DiscountCategory category, decimal amount, decimal priceAfter)
+    public sealed class DiscountResult(string name, DiscountType kind, decimal amountApplied, decimal priceAfter)
     {
-        public DiscountCategory Category { get; } = category;
-        public decimal Amount { get; } = amount;
+        public string Name { get; } = name ?? throw new ArgumentNullException(nameof(name));
+        public DiscountType Kind { get; } = kind;
+        public decimal AmountApplied { get; } = amountApplied;
         public decimal PriceAfter { get; } = priceAfter;
     }
-
 }

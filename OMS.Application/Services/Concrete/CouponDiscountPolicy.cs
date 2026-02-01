@@ -1,41 +1,28 @@
 ﻿using Application.Services.Interfaces;
+using Application.Services.Interfaces.Repo;
+using OMS.Domain.Models;
 using OMS.Enums;
-using OMS.Models;
-using OMS.Models.OMS.Domain.Models;
 
 namespace Application.Services.Concrete
 {
 
     namespace OMS.Domain.Policies
     {
-        public class CouponDiscountPolicy(DiscountCategory category) : IDiscountPolicy
+        public sealed class CouponDiscountPolicy(IDiscountCategoryRepository repo) : IDiscountPolicy
         {
-            private readonly DiscountCategory _category = category ?? throw new ArgumentNullException(nameof(category)); // injected from DB
+            public string Name => "Coupon";
+            public int Priority => 3;
 
-            public DiscountCategory Category => _category;
+            public async Task<bool> IsEligibleAsync(DiscountContext context, CancellationToken ct = default)
+                => (await repo.GetActiveByNameAsync(Name, ct)) is not null && context.CurrentPrice > 0m;
 
-            /// <summary>
-            /// Determine if the coupon applies to this order.
-            /// You can inject additional services (like repository) if needed.
-            /// </summary>
-            public bool IsEligible(DiscountContext context)
+            public async Task<DiscountResult?> GetDiscountAsync(DiscountContext context, CancellationToken ct = default)
             {
-                // TODO: implement real eligibility logic (check customer, order, coupon validity)
-                return true;
-            }
+                var cat = await repo.GetActiveByNameAsync(Name, ct);
+                if (cat is null) return null;
 
-            public DiscountResult GetDiscountResult(DiscountContext context)
-            {
-                decimal amount;
-
-                if (_category.Type == DiscountType.Fixed)
-                    amount = _category.Value;                  // e.g., 10€
-                else // Percentage
-                    amount = context.CurrentPrice * (_category.Value / 100m); // e.g., 5% of current price
-
-                context.ApplyDiscount(amount);
-
-                return new DiscountResult(_category, amount, context.CurrentPrice);
+                var amount = cat.Type == DiscountType.Percentage ? context.CurrentPrice * cat.Value : cat.Value;
+                return amount <= 0m ? null : new DiscountResult(cat.Name, cat.Type, amount, context.CurrentPrice);
             }
         }
     }

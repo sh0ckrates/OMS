@@ -29,9 +29,6 @@ namespace OMS.Infrastructure.Migrations
                     b.Property<DateTime>("AppliedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("DiscountCategoryId")
                         .HasColumnType("TEXT");
 
@@ -46,7 +43,7 @@ namespace OMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("DiscountCategoryId");
 
                     b.HasIndex("OrderId");
 
@@ -71,6 +68,9 @@ namespace OMS.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("Value")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("DiscountCategories");
@@ -82,7 +82,8 @@ namespace OMS.Infrastructure.Migrations
                             IsActive = true,
                             Name = "PriceList",
                             Priority = 1,
-                            Type = 0
+                            Type = 0,
+                            Value = 0.05m
                         },
                         new
                         {
@@ -90,7 +91,8 @@ namespace OMS.Infrastructure.Migrations
                             IsActive = true,
                             Name = "Promotion",
                             Priority = 2,
-                            Type = 0
+                            Type = 0,
+                            Value = 0.10m
                         },
                         new
                         {
@@ -98,7 +100,8 @@ namespace OMS.Infrastructure.Migrations
                             IsActive = true,
                             Name = "Coupon",
                             Priority = 3,
-                            Type = 1
+                            Type = 1,
+                            Value = 10.00m
                         });
                 });
 
@@ -129,7 +132,9 @@ namespace OMS.Infrastructure.Migrations
                 {
                     b.HasOne("OMS.Infrastructure.Entities.DiscountCategoryEntity", "Category")
                         .WithMany("AppliedDiscounts")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("DiscountCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("OMS.Infrastructure.Entities.OrderEntity", "Order")
                         .WithMany("AppliedDiscounts")

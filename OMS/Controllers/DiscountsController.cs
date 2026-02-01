@@ -1,35 +1,43 @@
+using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using OMS.Dtos;
 using OMS.Models;
 
-[ApiController]
-[Route("[controller]")]
-public class DiscountsController(DiscountEngine engine) : ControllerBase
+namespace OMS.Api.Controllers
 {
-    private readonly DiscountEngine _engine = engine;
-
-    [HttpPost("calculate")]
-    public ActionResult<CalculateDiscountResponse> Calculate([FromBody] CalculateDiscountRequest request)
+    [ApiController]
+    [Route("api/[controller]")]
+    public sealed class DiscountsController(IDiscountEngine engine) : ControllerBase
     {
-        // Map request to domain
-        var order = new Order(request.OrderId, request.CustomerId, request.BasePrice);
 
-        // Apply discounts
-        var summary = _engine.ApplyDiscount(order);
-
-        // Map to response DTO
-        var response = new CalculateDiscountResponse
+        /// <summary>
+        /// Calculates and returns the discount breakdown and final price.
+        /// </summary>
+        [HttpPost("calculate")]
+        public async Task<ActionResult<CalculateDiscountResponse>> Calculate(
+            [FromBody] CalculateDiscountRequest request,
+            CancellationToken ct)
         {
-            FinalPrice = summary.FinalPrice,
-            Discounts = summary.Discounts.Select(d => new DiscountResultDto
-            {
-                Name = d.Category.Name,
-                Type = d.Category.Type.ToString(),
-                Amount = d.Amount,
-                PriceAfter = d.PriceAfter
-            }).ToList()
-        };
+            // Map request to domain
+            var order = new Order(request.OrderId, request.CustomerId, request.BasePrice);
 
-        return Ok(response);
+            // Apply discounts
+            var summary = await engine.ApplyDiscountAsync(order, ct);
+
+            // Map domain summary to response DTO
+            var response = new CalculateDiscountResponse
+            {
+                FinalPrice = summary.FinalPrice,
+                Discounts = summary.Discounts.Select(d => new DiscountResultDto
+                {
+                    Name = d.Name,
+                    Type = d.Kind.ToString(),   // "Percentage" | "Fixed"
+                    Amount = d.AmountApplied,
+                    PriceAfter = d.PriceAfter
+                }).ToList()
+            };
+
+            return Ok(response);
+        }
     }
 }

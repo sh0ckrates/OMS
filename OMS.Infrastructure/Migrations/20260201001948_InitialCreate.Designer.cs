@@ -11,8 +11,8 @@ using OMS.Infrastructure.Data;
 namespace OMS.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260131000113_New-tables")]
-    partial class Newtables
+    [Migration("20260201001948_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,9 +32,6 @@ namespace OMS.Infrastructure.Migrations
                     b.Property<DateTime>("AppliedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("DiscountCategoryId")
                         .HasColumnType("TEXT");
 
@@ -49,7 +46,7 @@ namespace OMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("DiscountCategoryId");
 
                     b.HasIndex("OrderId");
 
@@ -74,9 +71,41 @@ namespace OMS.Infrastructure.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("Value")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("DiscountCategories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d1a2f3b4-c5d6-47e8-9f0a-1234567890ab"),
+                            IsActive = true,
+                            Name = "PriceList",
+                            Priority = 1,
+                            Type = 0,
+                            Value = 0.05m
+                        },
+                        new
+                        {
+                            Id = new Guid("e2b3c4d5-f6a7-48b9-0c1d-2345678901bc"),
+                            IsActive = true,
+                            Name = "Promotion",
+                            Priority = 2,
+                            Type = 0,
+                            Value = 0.10m
+                        },
+                        new
+                        {
+                            Id = new Guid("f3c4d5e6-a7b8-49c0-1d2e-3456789012cd"),
+                            IsActive = true,
+                            Name = "Coupon",
+                            Priority = 3,
+                            Type = 1,
+                            Value = 10.00m
+                        });
                 });
 
             modelBuilder.Entity("OMS.Infrastructure.Entities.OrderEntity", b =>
@@ -106,7 +135,9 @@ namespace OMS.Infrastructure.Migrations
                 {
                     b.HasOne("OMS.Infrastructure.Entities.DiscountCategoryEntity", "Category")
                         .WithMany("AppliedDiscounts")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("DiscountCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("OMS.Infrastructure.Entities.OrderEntity", "Order")
                         .WithMany("AppliedDiscounts")

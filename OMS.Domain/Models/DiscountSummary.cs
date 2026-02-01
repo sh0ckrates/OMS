@@ -1,4 +1,6 @@
-﻿namespace OMS.Models
+﻿using OMS.Domain.Models;
+
+namespace OMS.Models
 {
     public class DiscountSummary(decimal originalPrice, decimal finalPrice, IReadOnlyCollection<DiscountResult> discounts)
     {
