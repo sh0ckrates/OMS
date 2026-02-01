@@ -2,26 +2,15 @@
 
 namespace OMS.Models
 {
-    public class Order
+    public class Order(Guid id, Guid customerId, decimal initialPrice)
     {
-        public Guid Id { get; set; }
-        public Guid CustomerId { get; set; }
-        public decimal InitialPrice { get; set; }
-        public decimal FinalPrice { get; set; }  // after discounts
+        public Guid Id { get; set; } = id != Guid.Empty ? id : Guid.NewGuid();
+        public Guid CustomerId { get; set; } = customerId;
+        public decimal InitialPrice { get; set; } = initialPrice;
+        public decimal FinalPrice { get; set; } = initialPrice;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         // Applied discounts
-        public List<AppliedDiscount> AppliedDiscounts { get; set; } = new();
-
-        // Constructor
-        public Order(Guid id, Guid customerId, decimal initialPrice)
-        {
-            Id = id != Guid.Empty ? id : Guid.NewGuid();
-            CustomerId = customerId;
-            InitialPrice = initialPrice;
-            FinalPrice = initialPrice;
-        }
-
-        public Order() { }
+        public List<AppliedDiscount> AppliedDiscounts { get; set; } = [];
     }
 }

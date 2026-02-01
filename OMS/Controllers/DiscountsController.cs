@@ -14,9 +14,7 @@ namespace OMS.Api.Controllers
         /// Calculates and returns the discount breakdown and final price.
         /// </summary>
         [HttpPost("calculate")]
-        public async Task<ActionResult<CalculateDiscountResponse>> Calculate(
-            [FromBody] CalculateDiscountRequest request,
-            CancellationToken ct)
+        public async Task<ActionResult<CalculateDiscountResponse>> Calculate([FromBody] CalculateDiscountRequest request, CancellationToken ct)
         {
             // Map request to domain
             var order = new Order(request.OrderId, request.CustomerId, request.BasePrice);
@@ -31,7 +29,7 @@ namespace OMS.Api.Controllers
                 Discounts = summary.Discounts.Select(d => new DiscountResultDto
                 {
                     Name = d.Name,
-                    Type = d.Kind.ToString(),   // "Percentage" | "Fixed"
+                    Type = d.Kind.ToString(),
                     Amount = d.AmountApplied,
                     PriceAfter = d.PriceAfter
                 }).ToList()

@@ -3,6 +3,6 @@
     public class CalculateDiscountResponse
     {
         public decimal FinalPrice { get; set; }
-        public List<DiscountResultDto> Discounts { get; set; } = new List<DiscountResultDto>();
+        public List<DiscountResultDto> Discounts { get; set; } = [];
     }
 }

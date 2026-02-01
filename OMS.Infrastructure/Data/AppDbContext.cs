@@ -1,4 +1,3 @@
-﻿// OMS.Infrastructure/Data/AppDbContext.cs
 using Microsoft.EntityFrameworkCore;
 using OMS.Enums;
 using OMS.Infrastructure.Entities;

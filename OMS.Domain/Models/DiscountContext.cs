@@ -1,4 +1,3 @@
-﻿// OMS.Domain/Models/DiscountContext.cs
 using OMS.Models;
 
 namespace OMS.Domain.Models
@@ -10,10 +9,8 @@ namespace OMS.Domain.Models
 
         public void ApplyDiscount(decimal amount)
         {
-            amount = Round2(amount);
-            CurrentPrice = Math.Max(0m, Round2(CurrentPrice - amount));
+            amount = Math.Round(amount, 2, MidpointRounding.ToEven);
+            CurrentPrice = Math.Max(0m, Math.Round(CurrentPrice - amount, 2, MidpointRounding.ToEven));
         }
-
-        private static decimal Round2(decimal v) => Math.Round(v, 2, MidpointRounding.ToEven);
     }
 }

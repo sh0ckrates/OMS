@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             return rows.Select(MapToDomain).ToList();
         }
 
-        public async Task<DiscountCategory?> GetActiveByNameAsync(string name, CancellationToken ct = default)
+        public async Task<DiscountCategory> GetActiveByNameAsync(string name, CancellationToken ct = default)
         {
             var row = await db.DiscountCategories
                 .AsNoTracking()

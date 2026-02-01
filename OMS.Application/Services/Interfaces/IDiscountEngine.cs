@@ -1,4 +1,3 @@
-﻿// OMS.Application/Services/Interfaces/IDiscountEngine.cs
 using OMS.Domain.Models;
 using OMS.Models;
 using System.Threading;

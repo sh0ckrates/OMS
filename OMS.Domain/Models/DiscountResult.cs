@@ -1,5 +1,4 @@
-﻿// OMS.Domain/Models/DiscountResult.cs
-using OMS.Enums;
+﻿using OMS.Enums;
 
 namespace OMS.Domain.Models
 {

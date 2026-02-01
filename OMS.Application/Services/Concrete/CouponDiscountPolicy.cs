@@ -13,7 +13,7 @@ namespace Application.Services.Concrete
         public async Task<bool> IsEligibleAsync(DiscountContext context, CancellationToken ct = default)
             => (await repo.GetActiveByNameAsync(Name, ct)) is not null && context.CurrentPrice > 0m;
 
-        public async Task<DiscountResult?> GetDiscountAsync(DiscountContext context, CancellationToken ct = default)
+        public async Task<DiscountResult> GetDiscountAsync(DiscountContext context, CancellationToken ct = default)
         {
             var cat = await repo.GetActiveByNameAsync(Name, ct);
             if (cat is null) return null;

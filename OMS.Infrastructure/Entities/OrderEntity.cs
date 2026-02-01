@@ -8,6 +8,6 @@
         public decimal FinalPrice { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public ICollection<AppliedDiscountEntity> AppliedDiscounts { get; set; } = new List<AppliedDiscountEntity>();
+        public ICollection<AppliedDiscountEntity> AppliedDiscounts { get; set; } = [];
     }
 }
