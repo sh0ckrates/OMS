@@ -8,7 +8,7 @@ namespace Infrastructure.Repositories
 {
     public sealed class DiscountCategoryRepository(AppDbContext db) : IDiscountCategoryRepository
     {
-        public async Task<IReadOnlyList<DiscountCategory>> GetActiveAsync(CancellationToken ct = default)
+        public async Task<IReadOnlyList<DiscountCategory>> GetActiveDiscountCategories(CancellationToken ct = default)
         {
             var rows = await db.DiscountCategories
                 .AsNoTracking()
@@ -19,7 +19,7 @@ namespace Infrastructure.Repositories
             return rows.Select(MapToDomain).ToList();
         }
 
-        public async Task<DiscountCategory> GetActiveByNameAsync(string name, CancellationToken ct = default)
+        public async Task<DiscountCategory> GetActiveDiscountCategoryByName(string name, CancellationToken ct = default)
         {
             var row = await db.DiscountCategories
                 .AsNoTracking()

@@ -1,21 +1,23 @@
-﻿using Application.Services.Interfaces;
+using Application.Services.Interfaces;
 using OMS.Domain.Models;
 using OMS.Models;
 
-namespace Application.Services.Concrete
+namespace OMS.Application.Services
 {
     public sealed class DiscountEngine(IEnumerable<IDiscountPolicy> policies) : IDiscountEngine
     {
-        private readonly IReadOnlyList<IDiscountPolicy> _policies = policies.OrderBy(p => p.Priority).ToList();
+        private readonly IReadOnlyList<IDiscountPolicy> _policies = policies.ToList();
 
         public async Task<DiscountSummary> ApplyDiscountAsync(Order order, CancellationToken ct = default)
         {
             static decimal Round2(decimal v) => Math.Round(v, 2, MidpointRounding.ToEven);
 
+            var orderedPolicies = _policies.OrderBy(p => p.Priority).ToList();
+
             var context = new DiscountContext(order);
             var results = new List<DiscountResult>();
 
-            foreach (var policy in _policies)
+            foreach (var policy in orderedPolicies)
             {
                 if (context.CurrentPrice <= 0m) break;
 

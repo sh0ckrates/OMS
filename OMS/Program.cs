@@ -1,9 +1,9 @@
-using Application.Services.Concrete;
 using Application.Services.Interfaces;
 using Application.Services.Interfaces.Repo;
 using Microsoft.EntityFrameworkCore;
 using OMS.Infrastructure.Data;
 using Infrastructure.Repositories;
+using OMS.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
