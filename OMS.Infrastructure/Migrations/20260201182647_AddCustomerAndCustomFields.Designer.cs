@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OMS.Infrastructure.Data;
 
@@ -10,9 +11,11 @@ using OMS.Infrastructure.Data;
 namespace OMS.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260201182647_AddCustomerAndCustomFields")]
+    partial class AddCustomerAndCustomFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.2");
@@ -50,7 +53,7 @@ namespace OMS.Infrastructure.Migrations
                     b.ToTable("AppliedDiscounts");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomFieldDefinitionEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomFieldDefinitionEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,7 +76,7 @@ namespace OMS.Infrastructure.Migrations
                     b.ToTable("CustomFieldDefinitions");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomFieldOptionEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomFieldOptionEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +98,7 @@ namespace OMS.Infrastructure.Migrations
                     b.ToTable("CustomFieldOptions");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomFieldValueEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomerCustomFieldValueEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -120,7 +123,7 @@ namespace OMS.Infrastructure.Migrations
                     b.ToTable("CustomerCustomFieldValues");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomerEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomerEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -137,7 +140,7 @@ namespace OMS.Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomerFieldValueHistoryEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomerFieldValueHistoryEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,9 +270,9 @@ namespace OMS.Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomFieldOptionEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomFieldOptionEntity", b =>
                 {
-                    b.HasOne("OMS.Infrastructure.Entities.Customer.CustomFieldDefinitionEntity", "CustomFieldDefinition")
+                    b.HasOne("OMS.Infrastructure.Entities.CustomFieldDefinitionEntity", "CustomFieldDefinition")
                         .WithMany("Options")
                         .HasForeignKey("CustomFieldDefinitionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -278,15 +281,15 @@ namespace OMS.Infrastructure.Migrations
                     b.Navigation("CustomFieldDefinition");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomFieldValueEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomerCustomFieldValueEntity", b =>
                 {
-                    b.HasOne("OMS.Infrastructure.Entities.Customer.CustomFieldDefinitionEntity", "CustomFieldDefinition")
+                    b.HasOne("OMS.Infrastructure.Entities.CustomFieldDefinitionEntity", "CustomFieldDefinition")
                         .WithMany("CustomerValues")
                         .HasForeignKey("CustomFieldDefinitionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("OMS.Infrastructure.Entities.Customer.CustomerEntity", "Customer")
+                    b.HasOne("OMS.Infrastructure.Entities.CustomerEntity", "Customer")
                         .WithMany("CustomFieldValues")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -297,15 +300,15 @@ namespace OMS.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomerFieldValueHistoryEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomerFieldValueHistoryEntity", b =>
                 {
-                    b.HasOne("OMS.Infrastructure.Entities.Customer.CustomFieldDefinitionEntity", "CustomFieldDefinition")
+                    b.HasOne("OMS.Infrastructure.Entities.CustomFieldDefinitionEntity", "CustomFieldDefinition")
                         .WithMany("ValueHistory")
                         .HasForeignKey("CustomFieldDefinitionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("OMS.Infrastructure.Entities.Customer.CustomerEntity", "Customer")
+                    b.HasOne("OMS.Infrastructure.Entities.CustomerEntity", "Customer")
                         .WithMany("FieldValueHistory")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -316,7 +319,7 @@ namespace OMS.Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomFieldDefinitionEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomFieldDefinitionEntity", b =>
                 {
                     b.Navigation("CustomerValues");
 
@@ -325,7 +328,7 @@ namespace OMS.Infrastructure.Migrations
                     b.Navigation("ValueHistory");
                 });
 
-            modelBuilder.Entity("OMS.Infrastructure.Entities.Customer.CustomerEntity", b =>
+            modelBuilder.Entity("OMS.Infrastructure.Entities.CustomerEntity", b =>
                 {
                     b.Navigation("CustomFieldValues");
 

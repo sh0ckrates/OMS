@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OMS.Enums;
 using OMS.Infrastructure.Entities;
+using OMS.Infrastructure.Entities.Customer;
 
 namespace OMS.Infrastructure.Data
 {
@@ -9,6 +10,12 @@ namespace OMS.Infrastructure.Data
         public DbSet<OrderEntity> Orders => Set<OrderEntity>();
         public DbSet<AppliedDiscountEntity> AppliedDiscounts => Set<AppliedDiscountEntity>();
         public DbSet<DiscountCategoryEntity> DiscountCategories => Set<DiscountCategoryEntity>();
+
+        public DbSet<CustomerEntity> Customers => Set<CustomerEntity>();
+        public DbSet<CustomFieldEntity> CustomFieldDefinitions => Set<CustomFieldEntity>();
+        public DbSet<CustomFieldOptionEntity> CustomFieldOptions => Set<CustomFieldOptionEntity>();
+        public DbSet<CustomFieldValueEntity> CustomerCustomFieldValues => Set<CustomFieldValueEntity>();
+        public DbSet<CustomerFieldValueHistoryEntity> CustomerFieldValueHistory => Set<CustomerFieldValueHistoryEntity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +64,38 @@ namespace OMS.Infrastructure.Data
                     IsActive = true
                 }
             );
+
+            // --- Part 2: Customer and dynamic custom fields ---
+            modelBuilder.Entity<CustomFieldEntity>()
+                .HasMany(f => f.Options)
+                .WithOne(o => o.CustomFieldDefinition)
+                .HasForeignKey(o => o.CustomFieldDefinitionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CustomFieldValueEntity>()
+                .HasOne(v => v.Customer)
+                .WithMany(c => c.CustomFieldValues)
+                .HasForeignKey(v => v.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<CustomFieldValueEntity>()
+                .HasOne(v => v.CustomFieldDefinition)
+                .WithMany(f => f.CustomerValues)
+                .HasForeignKey(v => v.CustomFieldDefinitionId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<CustomFieldValueEntity>()
+                .HasIndex(v => new { v.CustomerId, v.CustomFieldDefinitionId })
+                .IsUnique();
+
+            modelBuilder.Entity<CustomerFieldValueHistoryEntity>()
+                .HasOne(h => h.Customer)
+                .WithMany(c => c.FieldValueHistory)
+                .HasForeignKey(h => h.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<CustomerFieldValueHistoryEntity>()
+                .HasOne(h => h.CustomFieldDefinition)
+                .WithMany(f => f.ValueHistory)
+                .HasForeignKey(h => h.CustomFieldDefinitionId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

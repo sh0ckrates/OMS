@@ -20,7 +20,7 @@ namespace OMS.Infrastructure.Data
                 if (Directory.Exists(infraDir))
                 {
                     var dbPath = Path.Combine(infraDir, "oms.db");
-                    var connectionString = $"Data Source={dbPath};Journal Mode=Delete";
+                    var connectionString = $"Data Source={dbPath}";
                     var options = new DbContextOptionsBuilder<AppDbContext>()
                         .UseSqlite(connectionString)
                         .Options;
@@ -30,7 +30,7 @@ namespace OMS.Infrastructure.Data
             }
             // Fallback: same folder as executing assembly
             var fallbackPath = Path.Combine(AppContext.BaseDirectory, "oms.db");
-            var fallbackConnection = $"Data Source={fallbackPath};Journal Mode=Delete";
+            var fallbackConnection = $"Data Source={fallbackPath}";
             return new AppDbContext(
                 new DbContextOptionsBuilder<AppDbContext>().UseSqlite(fallbackConnection).Options);
         }
