@@ -11,7 +11,6 @@ namespace Infrastructure.Repositories
     {
         public async Task SaveAsync(Order order)
         {
-            // Map Domain Order -> EF OrderEntity
             var orderEntity = new OrderEntity
             {
                 Id = order.Id != Guid.Empty ? order.Id : Guid.NewGuid(),
@@ -34,7 +33,7 @@ namespace Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<Order?> GetByIdAsync(Guid orderId)
+        public async Task<Order> GetByIdAsync(Guid orderId)
         {
             var entity = await context.Orders
                 .Include(o => o.AppliedDiscounts)
@@ -44,7 +43,6 @@ namespace Infrastructure.Repositories
             if (entity == null)
                 return null;
 
-            // Map EF entity -> Domain model
             var order = new Order(entity.Id, entity.CustomerId, entity.BasePrice)
             {
                 FinalPrice = entity.FinalPrice,

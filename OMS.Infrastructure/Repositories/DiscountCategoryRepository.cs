@@ -30,11 +30,10 @@ namespace Infrastructure.Repositories
 
         private static DiscountCategory MapToDomain(DiscountCategoryEntity e)
         {
-            // Mirror the semantics that matter in the domain
             var model = new DiscountCategory(
                 name: e.Name,
                 type: e.Type,
-                value: e.Value,          // Percentage (0..1) or Fixed amount
+                value: e.Value,
                 priority: e.Priority,
                 isActive: e.IsActive
             )

@@ -17,7 +17,6 @@ builder.Services.AddScoped<IDiscountPolicy, CouponDiscountPolicy>();
 builder.Services.AddScoped<IDiscountEngine, DiscountEngine>();
 builder.Services.AddControllers();
 
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
