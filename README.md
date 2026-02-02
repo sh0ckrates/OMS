@@ -22,7 +22,6 @@ dotnet ef database update --project OMS.Infrastructure --startup-project OMS
 ## Docs
 - `docs/ER-Diagram-1.md` – Orders & discounts (Part 1)
 - `docs/ER-Diagram-2.md` – Customer & custom fields (Part 2)
-- `docs/Part1-Architecture-Diagram.md` – Discount subsystem architecture
 
 ## Tests
 dotnet test OMS.Tests
