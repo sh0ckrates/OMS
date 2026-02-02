@@ -10,23 +10,23 @@ namespace OMS.Application.Services
         public string Name => "PriceList";
         public int Priority { get; set; }
 
-        public async Task<bool> IsEligibleAsync(DiscountContext context, CancellationToken ct = default)
+        public async Task<bool> IsEligibleAsync(decimal currentPrice, CancellationToken ct = default)
         {
             var cat = await discountCategoryRepo.GetActiveDiscountCategoryByName(Name, ct);
-            return cat is not null && context.CurrentPrice > 0m;
+            return cat is not null && currentPrice > 0m;
         }
 
-        public async Task<DiscountResult> GetDiscountAsync(DiscountContext context, CancellationToken ct = default)
+        public async Task<DiscountResult> GetDiscountAsync(decimal currentPrice, CancellationToken ct = default)
         {
             var cat = await discountCategoryRepo.GetActiveDiscountCategoryByName(Name, ct);
             if (cat is null) return null;
             Priority = cat.Priority;
 
-            decimal amount = cat.Type == DiscountType.Percentage ? context.CurrentPrice * cat.Value : cat.Value;
+            decimal amount = cat.Type == DiscountType.Percentage ? currentPrice * cat.Value : cat.Value;
 
             if (amount <= 0m) return null;
 
-            return new DiscountResult(cat.Name, cat.Type, amount, context.CurrentPrice);
+            return new DiscountResult(cat.Name, cat.Type, amount, currentPrice - amount);
         }
     }
 }

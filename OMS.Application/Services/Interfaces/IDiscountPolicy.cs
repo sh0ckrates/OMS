@@ -6,7 +6,7 @@ namespace Application.Services.Interfaces
     {
         string Name { get; }
         int Priority { get; set; }
-        Task<bool> IsEligibleAsync(DiscountContext context, CancellationToken ct = default);
-        Task<DiscountResult?> GetDiscountAsync(DiscountContext context, CancellationToken ct = default);
+        Task<bool> IsEligibleAsync(decimal currentPrice, CancellationToken ct = default);
+        Task<DiscountResult> GetDiscountAsync(decimal currentPrice, CancellationToken ct = default);
     }
 }

@@ -1,4 +1,3 @@
-using System.Linq;
 using Application.Services.Interfaces;
 using Moq;
 using OMS.Application.Services;
@@ -62,16 +61,16 @@ public class DiscountEngineTests
         var policy = new Mock<IDiscountPolicy>();
         policy.Setup(p => p.Name).Returns("Skip");
         policy.Setup(p => p.Priority).Returns(1);
-        policy.Setup(p => p.IsEligibleAsync(It.IsAny<DiscountContext>(), It.IsAny<CancellationToken>()))
+        policy.Setup(p => p.IsEligibleAsync(It.IsAny<decimal>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(false);
-        var engine = new DiscountEngine(new[] { policy.Object });
+        var engine = new DiscountEngine([policy.Object]);
         var order = new Order(Guid.NewGuid(), Guid.NewGuid(), 100.00m);
 
         var summary = await engine.ApplyDiscountAsync(order);
 
         Assert.Equal(100.00m, summary.FinalPrice);
         Assert.Empty(summary.Discounts);
-        policy.Verify(p => p.GetDiscountAsync(It.IsAny<DiscountContext>(), It.IsAny<CancellationToken>()), Times.Never);
+        policy.Verify(p => p.GetDiscountAsync(It.IsAny<decimal>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
 
@@ -80,14 +79,14 @@ public class DiscountEngineTests
         var policy = new Mock<IDiscountPolicy>();
         policy.Setup(p => p.Name).Returns(name);
         policy.Setup(p => p.Priority).Returns(priority);
-        policy.Setup(p => p.IsEligibleAsync(It.IsAny<DiscountContext>(), It.IsAny<CancellationToken>()))
+        policy.Setup(p => p.IsEligibleAsync(It.IsAny<decimal>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
-        policy.Setup(p => p.GetDiscountAsync(It.IsAny<DiscountContext>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((DiscountContext ctx, CancellationToken _) =>
+        policy.Setup(p => p.GetDiscountAsync(It.IsAny<decimal>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((decimal currentPrice, CancellationToken _) =>
             {
-                var amountToApply = Math.Min(discountAmount, ctx.CurrentPrice);
-                var priceAfter = ctx.CurrentPrice - amountToApply;
+                var amountToApply = Math.Min(discountAmount, currentPrice);
+                var priceAfter = currentPrice - amountToApply;
                 return new DiscountResult(name, DiscountType.Fixed, amountToApply, priceAfter);
             });
 

@@ -2,7 +2,7 @@ using OMS.Models;
 
 namespace OMS.Domain.Models
 {
-    public sealed class DiscountContext(Order order)
+    public sealed class DiscountCalculation(Order order)
     {
         public Order Order { get; } = order ?? throw new ArgumentNullException(nameof(order));
         public decimal CurrentPrice { get; private set; } = order.InitialPrice;

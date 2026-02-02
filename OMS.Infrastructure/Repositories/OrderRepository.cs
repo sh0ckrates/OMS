@@ -54,12 +54,11 @@ namespace Infrastructure.Repositories
             foreach (var d in entity.AppliedDiscounts)
             {
                 order.AppliedDiscounts.Add(new AppliedDiscount(
-                    id: d.Id,
                     category: new DiscountCategory(),
                     discountName: d.DiscountName,
                     amount: d.Amount,
-                    priceAfter: d.PriceAfter//,
-                                            //appliedAt: d.AppliedAt
+                    priceAfter: d.PriceAfter,
+                    id: d.Id
                 ));
             }
 

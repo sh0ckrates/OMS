@@ -10,7 +10,6 @@ namespace OMS.Models
         public decimal FinalPrice { get; set; } = initialPrice;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Applied discounts
         public List<AppliedDiscount> AppliedDiscounts { get; set; } = [];
     }
 }
