@@ -2,6 +2,8 @@
   <Project Path="OMS.Application/OMS.Application.csproj" />
   <Project Path="OMS.Domain/OMS.Domain.csproj" />
   <Project Path="OMS.Infrastructure/OMS.Infrastructure.csproj" />
-  <Project Path="OMS.Tests/OMS.Tests.csproj" />
+  <Project Path="OMS.Tests/OMS.Tests.csproj">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
   <Project Path="OMS/OMS.Api.csproj" />
 </Solution>
